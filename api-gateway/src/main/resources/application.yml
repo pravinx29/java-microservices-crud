@@ -10,46 +10,18 @@ spring:
     gateway:
       server:
         webflux:
-          # Discovery locator moved here
           discovery:
             locator:
-              enabled: true
-              lower-case-service-id: true
-          
-          # Default filters moved here
-          default-filters:
-            - AddRequestHeader=X-Gateway, SpringCloudGateway
-          
-          # Routes moved here
-          routes:
-            # User Service Route
-            - id: user-service
-              uri: lb://user-service
-              predicates:
-                - Path=/users/**
-              filters:
-                - StripPrefix=1
-
-            # Department Service Route
-            - id: department-service
-              uri: lb://department-service
-              predicates:
-                - Path=/departments/**
-              filters:
-                - StripPrefix=1
+              enabled: true # Keep this for auto-discovery of other services
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+# Keep Actuator for testing
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,gateway
-
-logging:
-  level:
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.http.server.reactive: DEBUG
+        include: gateway, health, info
