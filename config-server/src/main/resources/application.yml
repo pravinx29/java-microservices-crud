@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: config-server
-
   cloud:
     config:
       server:
         git:
           uri: https://github.com/pravinx29/java-microservices-crud.git
-          clone-on-start: false  # Avoids cloning on every start; use true for dev if needed [web:0]
-
+          default-label: main      # branch name
+          search-paths: config     # folder inside repo where yml files are
+          clone-on-start: true     # clones once when server starts
