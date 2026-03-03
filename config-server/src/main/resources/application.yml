@@ -10,4 +10,5 @@ spring:
       server:
         git:
           uri: https://github.com/pravinx29/java-microservices-crud.git
-          clone-on-start: false
+          clone-on-start: false  # Avoids cloning on every start; use true for dev if needed [web:0]
+

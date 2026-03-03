@@ -1,49 +1,55 @@
 server:
   port: 8080
 
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-
 spring:
   application:
     name: api-gateway
-
   main:
     web-application-type: reactive
-
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      server:
+        webflux:
+          # Discovery locator moved here
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          
+          # Default filters moved here
+          default-filters:
+            - AddRequestHeader=X-Gateway, SpringCloudGateway
+          
+          # Routes moved here
+          routes:
+            # User Service Route
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/users/**
+              filters:
+                - StripPrefix=1
 
-      default-filters:
-        - AddRequestHeader=X-Gateway, SpringCloudGateway
-
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/users/**
-          filters:
-            - RewritePath=/users/(?<segment>.*), /${segment}
-
-        - id: department-service
-          uri: lb://department-service
-          predicates:
-            - Path=/departments/**
-          filters:
-            - RewritePath=/departments/(?<segment>.*), /${segment}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
+            # Department Service Route
+            - id: department-service
+              uri: lb://department-service
+              predicates:
+                - Path=/departments/**
+              filters:
+                - StripPrefix=1
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
