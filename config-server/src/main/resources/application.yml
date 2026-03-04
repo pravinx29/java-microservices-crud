@@ -12,3 +12,5 @@ spring:
           default-label: main      # branch name
           search-paths: config
           clone-on-start: true
+# Force a fresh clone into this new folder
+          basedir: ${user.home}/config-repo-cache-new
