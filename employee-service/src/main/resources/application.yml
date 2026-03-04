@@ -3,3 +3,7 @@ spring:
     name: employee-service
   config:
     import: "optional:configserver:http://localhost:8888"
+  cloud:
+    config:
+      # Tells the client which branch to request from the Config Server
+      label: main

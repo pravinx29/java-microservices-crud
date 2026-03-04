@@ -1,5 +1,9 @@
 spring:
   application:
-    name: user-service
+    name: department-service
   config:
     import: "optional:configserver:http://localhost:8888"
+  cloud:
+    config:
+      # Add this line to tell the client which branch to request
+      label: main
